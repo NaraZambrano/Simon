@@ -24,45 +24,78 @@ function App() {
    }
  ]);
  const [sequence, setSequence] = useState([]);
- const [curretnGame, setCurrentGame] = useState([]);
- const [turn, setTurn] = useState (null);
+ const [currentGame, setCurrentGame] = useState([]);
+ const [turn, setTurn] = useState(null);
+ const [isAllowedToPlay, setIsAllowedToPlay] = useState(false)
+
 
  const handleClick = (index) => {
-  setCurrentGame([...curretnGame, index])
-  //check if index === sequence[turn]
-
-  
-  
+   setCurrentGame([...currentGame, index]);
+   //check if index === sequence[turn]
+    
  }
 
 
  const randomNumber = () => {
+  
    const minNumber = 0;
    const maxNumber = 3;
    const randomNumber = Math.floor(Math.random() * (maxNumber - minNumber + 1) + minNumber);
    setSequence([...sequence, randomNumber]);
+  
  }
 
- useEffect(() => {
-   console.log(colors.length)
-   randomNumber();
-    return () => {
-     setSequence([]);
-   }
- }, [])
 
+ useEffect(() => {
+   //Check all sequence
+   sequence.map((elem, index)=> {
+     if(elem === currentGame[index]){
+       //
+     } else {
+       console.log(`ELSE elem ${elem}`)
+       console.log(`ELSE game ${currentGame[index]}`)
+       //setSequence([]);
+       //setCurrentGame([])
+       setIsAllowedToPlay(false);
+     }     
+   })
+  
+   if(sequence.length === currentGame.length && sequence.length > 0) setIsAllowedToPlay(true);
+  
+ }, [currentGame])
+  useEffect(() => {
+   if(isAllowedToPlay){
+     randomNumber();
+   } else {
+     setSequence([]);
+     setCurrentGame([]);
+    
+   }
+
+
+ }, [isAllowedToPlay])
+
+
+ useEffect(() => {
+   randomNumber();
+ }, [])
   useEffect(() => {
    const tempArray = [...colors];
   
-   sequence.map(index => {
+   /*sequence.map(index => {
      tempArray[index].opacity = 1;
+    
      setColor(tempArray);
+     console.log(colors)
      setTimeout(() => {
        console.log("Retrasado por 1 segundo.");
        tempArray[index].opacity = 0.2;
-       setColor(tempArray);
+       console.log(tempArray)
+
+
+       setColor(colors);
      }, 1000);
-   }) 
+   })*/ 
  }, [sequence])
 
 
@@ -70,8 +103,8 @@ function App() {
    <>
      <div className='header'>
        <h1>SUPER SIMON</h1>
-       <p>Game{sequence}</p>
-       <p>Payer{setCurrentGame}</p>
+       <p>Game {sequence}</p>
+       <p>Player {currentGame}</p>
      </div>
      <div className='container'>
        {
@@ -102,6 +135,7 @@ export default App
 2.- Detectar click en los componentes[SOLVED]
 3.- Crear array para almacenar la secuencia del juego[SOLVED]
 4.- Crear el color random para añadirlo a la secuencia [SOLVED]
+4.5.- Reproducir secuencia modo FAKE
 5.- Reproducir la secuencia -- HARD
    a)Iniciar color, activar color
    b)Establecer un timeout, activamos y desactivamos colores
@@ -119,4 +153,13 @@ OPCIONAL
 -Tiempo
 
 
+
+
+
+
+
+
+
+
 */
+
